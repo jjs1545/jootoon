@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jootoon/models/webtoon_model.dart';
 import 'package:jootoon/services/api_service.dart';
+import 'package:jootoon/widgets/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   /// const -> 컴파일 전에 값을 알 수 있는 타입
@@ -40,27 +41,50 @@ class HomeScreen extends StatelessWidget {
             //     for (var webtoon in snapshot.data!) Text(webtoon.title)
             //   ],
             // );
-            return ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data!.length,
-
-              /// 아이템 렌더
-              itemBuilder: (context, index) {
-                // print(index);
-                var webtoon = snapshot.data![index];
-                return Text(webtoon.title);
-              },
-
-              /// separatorBuilder -> 리스트 아이템 사이 렌더(구분용)
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 20,
-              ),
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 50,
+                ),
+                Expanded(
+                  child: makeList(
+                    snapshot,
+                  ),
+                ),
+              ],
             );
           }
           return const Center(
             child: CircularProgressIndicator(),
           );
         },
+      ),
+    );
+  }
+
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: snapshot.data!.length,
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 20,
+      ),
+
+      /// 아이템 렌더
+      itemBuilder: (context, index) {
+        // print(index);
+        var webtoon = snapshot.data![index];
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
+        );
+      },
+
+      /// separatorBuilder -> 리스트 아이템 사이 렌더(구분용)
+      separatorBuilder: (context, index) => const SizedBox(
+        width: 40,
       ),
     );
   }
