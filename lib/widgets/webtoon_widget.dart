@@ -18,6 +18,7 @@ class Webtoon extends StatelessWidget {
       onTap: () {
         // print('take me homeeee');
         /// route -> StatelelessWidget을 애니메이션으로 감싸서 스크린처럼 보일 수 있도록 한다.
+        /// MaterialPageRoute -> Navigator.push 이용 시 애니메이션 효과 및 뒤로가기 등 지원
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -32,6 +33,7 @@ class Webtoon extends StatelessWidget {
       },
       child: Column(
         children: [
+          /// Hero Widget -> 두 화면 사이에서 발생하는 애니메이션
           Hero(
             tag: id, // Hero widget은 tag가 필수(필수 값으로 태그 구분)
             child: Container(
