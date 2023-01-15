@@ -6,7 +6,7 @@ class HomeScreen extends StatelessWidget {
   /// const -> 컴파일 전에 값을 알 수 있는 타입
   HomeScreen({super.key});
 
-  Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
+  final Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,33 @@ class HomeScreen extends StatelessWidget {
         /// context -> 부모에게 전달, snapshot -> Future의 상태 파악 가능
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return const Text("There is data!");
+            /// 많은 양의 데이터를 보여주고 싶을 때 -> ListView
+            // return ListView(
+            //   children: [
+            //     /// ! -> dart에게 데이터가 있다는 것을 확신시켜 준다.
+            //     for (var webtoon in snapshot.data!) Text(webtoon.title)
+            //   ],
+            // );
+            return ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data!.length,
+
+              /// 아이템 렌더
+              itemBuilder: (context, index) {
+                // print(index);
+                var webtoon = snapshot.data![index];
+                return Text(webtoon.title);
+              },
+
+              /// separatorBuilder -> 리스트 아이템 사이 렌더(구분용)
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 20,
+              ),
+            );
           }
-          return const Text('Loading ...');
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
